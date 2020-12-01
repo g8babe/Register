@@ -41,7 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    new RegisterActivity.registeruser().execute("");
+                new RegisterActivity.registeruser().execute("");
             }
         });
     }
@@ -67,14 +67,18 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             try{
-                con = connectionClass(ConnectionClass.un.toString(),ConnectionClass.pass.toString(),ConnectionClass.db.toString(),ConnectionClass.ip.toString());
+                Class.forName("net.sourceforge.jtds.jdbc.Driver");
+                //con = DriverManager.getConnection("jdbc:sqlserver://127.0.0.1:1433;encrypt=false;loginTimeout=30;Database=test;user=sa;password=0000");
+                // con = connectionClass(ConnectionClass.un.toString(),ConnectionClass.pass.toString(),ConnectionClass.db.toString(),ConnectionClass.ip.toString());
                 if(con == null){
                     z = "Check Your Internet Connection";
                 }
                 else{
                     String sql = "INSERT INTO register (name,email,password) VALUES ('"+name.getText()+"','"+email.getText()+"','"+password.getText()+"')";
-                    stmt = con.createStatement();
+                    Statement stmt = con.createStatement();
                     stmt.executeUpdate(sql);
+                    //PreparedStatement prepsInsertProduct = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);) {
+                    //prepsInsertProduct.execute();
                 }
 
             }catch (Exception e){
@@ -87,20 +91,21 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    @SuppressLint("NewApi")
-    public Connection connectionClass(String user, String password, String database, String server){
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        Connection connection = null;
-        String connectionURL = null;
-        try{
-            Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connectionURL = "jdbc:jtds:sqlserver://" + server+"/" + database + ";user=" + user + ";password=" + password + ";";
-            connection = DriverManager.getConnection(connectionURL);
-        }catch (Exception e){
-            Log.e("SQL Connection Error : ", e.getMessage());
-        }
+    //@SuppressLint("NewApi")
+    //public Connection connectionClass(String user, String password, String database, String server){
+    //    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+    //   StrictMode.setThreadPolicy(policy);
+    //    Connection connection = null;
+    //    String connectionURL = null;
+    //    try{
+    //        Class.forName("net.sourceforge.jtds.jdbc.Driver");
+    //connectionURL = "jdbc:jtds:sqlserver://" + server+"/" + database + ";user=" + user + ";password=" + password + ";";
+    //connection = DriverManager.getConnection(connectionURL);
+    //        connection = DriverManager.getConnection("jdbc:jtds:sqlserver://172.20.10.2;DatabaseName=test", "sa", "0000");
+    //    }catch (Exception e){
+    //       Log.e("SQL Connection Error : ", e.getMessage());
+    //    }
 
-        return connection;
-    }
+    //    return connection;
+    //}
 }
