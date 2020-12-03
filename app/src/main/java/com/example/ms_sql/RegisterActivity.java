@@ -58,7 +58,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            status.setText("Registration Successful");
+            //status.setText("Registration Successful");
+            status.setText(z);
+            //system.out.printf(inst_sql);
             name.setText("");
             email.setText("");
             password.setText("");
@@ -68,22 +70,26 @@ public class RegisterActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             try{
                 Class.forName("net.sourceforge.jtds.jdbc.Driver");
-                //con = DriverManager.getConnection("jdbc:sqlserver://127.0.0.1:1433;encrypt=false;loginTimeout=30;Database=test;user=sa;password=0000");
+                Connection con = DriverManager.getConnection("jdbc:jtds:sqlserver://127.0.0.1:1433/test;user=sa;password=0000;");
+
                 // con = connectionClass(ConnectionClass.un.toString(),ConnectionClass.pass.toString(),ConnectionClass.db.toString(),ConnectionClass.ip.toString());
-                if(con == null){
-                    z = "Check Your Internet Connection";
-                }
-                else{
-                    String sql = "INSERT INTO register (name,email,password) VALUES ('"+name.getText()+"','"+email.getText()+"','"+password.getText()+"')";
-                    Statement stmt = con.createStatement();
-                    stmt.executeUpdate(sql);
-                    //PreparedStatement prepsInsertProduct = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);) {
-                    //prepsInsertProduct.execute();
-                }
+                //if(con == null){
+                //    z = "Check Your Internet Connection";
+                //} else{
+                String inst_sql = "INSERT INTO register (name,email,password) VALUES ('"+name.getText()+"','"+email.getText()+"','"+password.getText()+"')";
+                Statement stmt = con.createStatement();
+                stmt.execute(inst_sql);
+                //PreparedStatement prepsInsertProduct = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);) {
+                //prepsInsertProduct.execute();
+                //}
+
+
 
             }catch (Exception e){
                 isSuccess = false;
-                z = e.getMessage();
+                //z = e.getMessage();
+                z = e.toString();
+                //z = e.printStackTrace();
             }
 
             return z;
